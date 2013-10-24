@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* CSS Document */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
+:focus { outline:0; }
+a:active { outline:none; }
+body { line-height:1; color:black; background:white; }
+ol,ul { list-style:none; }
+table { border-collapse:separate; border-spacing:0; }
+caption,th,td { text-align:left; font-weight:normal; }
+a img,img{border:0;}
+.fix{*zoom:1;}
+.fix:after{display:block; content:"clear"; height:0; line-height:0; clear:both; overflow:hidden; visibility:hidden;}
+.fr{float:right; display:inline-block;}
+
+a{color:#055283; text-decoration:none;}
+body{font-size:12px;}
+.index{ background:#336697; height:100%;}
+.indexBg{width:890px; height:370px; margin:0 auto; background:url(../images/bg.jpg) no-repeat; padding-top:230px;}
+.indexNr{margin:0 auto; width:299px;}
+.inputA{width:279px; padding:0 10px; height:45px; background:url(../images/input.jpg) no-repeat; border:0 none; line-height:45px; margin:0; margin-left:-20px; margin-bottom:15px;}
+.yzmDiv{width:299px; height:44px; margin-bottom:15px;}
+.inputB{ width:183px; height:44px; background:url(../images/inputb.jpg) no-repeat; padding:0 10px; margin-left:-20px; border:0 none; float:left; line-height:44px;}
+.yzm{ width:109px; height:44px; float:left; margin-left:-14px;}
+.button{width:299px; height:44px; background:url(../images/button.jpg) no-repeat; border:0 none; margin-left:-20px; cursor:pointer;}
+.foot{ color:#c8dae5; padding-top:60px; text-align:center; line-height:20px;}
+
+.head{width:100%; min-width:1000px; height:84px; margin-bottom: 5px;}
+.headTop{ height:50px; background:url(../images/topBg.jpg) repeat-x;}
+.logo{float:left; margin-left:30px;}
+.time{float:left; margin-left:30px; background:url(../images/time.jpg) left center no-repeat; padding-left:20px; height:40px; line-height:40px; margin-top:7px; color:#154372;}
+.who{ float:left; background:url(../images/who.jpg) left center no-repeat; padding-left:21px; height:40px; line-height:40px; color:#154372; margin-top:6px;}
+.off{float:left; background:url(../images/off.jpg) left center no-repeat; padding-left: 18px; height:40px; line-height:40px; color:#154372; margin-top:6px; margin-left:40px; padding-right:20px;}
+
+.nav{width:100%; height:31px; background:url(../images/navBg.jpg) repeat-x; padding-top:3px; line-height:31px;}
+.nav li:first-child{margin-left:25px;}
+.nav li{ width:74px; height:31px; float:left;text-align:center; margin-right:5px;}
+.nav li a{ color:#FFFFFF; font-weight:bold; text-decoration:none;}
+.nav li.curr{background:url(../images/navLi.jpg) no-repeat;}
+.nav li.curr a{color:#154372;}
+.main{width:100%;border-top:1px solid #a7b2bc;}
+.mainL{width:179px; border-right:1px solid #a7b2bc; background:#d9dfe5; position:absolute; left:0;}
+.mainL dl{ margin-bottom:3px;}
+.mainL dt{ background:url(../images/liBg.jpg) repeat-x; line-height:30px; height:30px; padding-left:10px; color:#333333; font-weight:bold; cursor:pointer;}
+.mainL dd{padding-left:20px; height:25px; line-height:25px; display:none;}
+.mainL dd a{color:#055283; text-decoration:none;}
+
+.mainR{ padding-left:180px; overflow-x:hidden; overflow-y:auto}
+.content{padding:15px 20px;}
+.h2{color:#154372; line-height:25px; margin-bottom:15px;}
+.table{ border-collapse:collapse; border:1px solid #c6cdd3;}
+.table th{border:1px solid #c6cdd3; text-align: center; vertical-align:middle; height:25px; background:#e4e8eb; line-height:25px;}
+.table td {border:1px solid #c6cdd3; text-align: center; vertical-align:middle; height:25px; line-height:25px;}
+
+.pages{ height:30px; line-height:30px; text-align:right;}
+.pages span{ margin-left:10px;}
+.pages i{ color:#999999; font-style:normal; margin-left:10px}
+.pages span a{color:#055283; text-decoration:none;}

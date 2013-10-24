@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- 定时服务定义 -->
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<!-- 自动启动 -->
+		<property name="autoStartup">
+			<value>true</value>
+		</property>
+		<property name="triggers">
+			<list>
+<!-- 				<ref local="sinaWeiboJobTrigger"/> -->
+<!-- 				<ref local="tencentWeiboJobTrigger"/> -->
+				<ref local="weiboJobTrigger"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Weibo JOB -->
+	<bean id="weiboJob" class="com.suntomor.newsbroke.weibo.job.WeiboJobDetail"/>
+	<bean id="weiboJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="weiboJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="true" />
+	</bean>
+	<bean id="weiboJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="weiboJobDetail" />
+		<property name="cronExpression">
+			<value>00 */10 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<!-- TuiSong JOB -->
+	<bean id="newsTuiSongJob" class="com.suntomor.newsbroke.news.job.NewsTuiSongJob"/>
+	<bean id="newsTuiSongDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="newsTuiSongJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="true" />
+	</bean>
+	<bean id="newsTuiSongTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="newsTuiSongDetail" />
+		<property name="cronExpression">
+			<value>00 */10 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- sina web -->
+<!-- 	<bean id="sinaWeiboJob" class="com.suntomor.newsbroke.weibo.job.SinaWeiboJob"/> -->
+<!-- 	<bean id="sinaWeiboJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="sinaWeiboJob" /> -->
+<!-- 		<property name="targetMethod" value="execute" /> -->
+<!-- 		<property name="concurrent" value="true" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="sinaWeiboJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="sinaWeiboJobDetail" /> -->
+<!-- 		<property name="cronExpression"> -->
+<!-- 			<value>00 */5 * * * ?</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	
+	<!-- tencent web -->
+<!-- 	<bean id="tencentWeiboJob" class="com.suntomor.newsbroke.weibo.job.TencentWeiboJob"/> -->
+<!-- 	<bean id="tencentWeiboJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="tencentWeiboJob" /> -->
+<!-- 		<property name="targetMethod" value="execute" /> -->
+<!-- 		<property name="concurrent" value="true" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="tencentWeiboJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="tencentWeiboJobDetail" /> -->
+<!-- 		<property name="cronExpression"> -->
+<!-- 			<value>00 */10 * * * ?</value> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+</beans>

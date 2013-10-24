@@ -1,0 +1,62 @@
+form{
+margin: 0px auto;
+width: 95%;
+border: solid 1px #CCCCCC;
+}
+ 
+.bo{
+border-bottom: solid 1px #CCCCCC;
+}
+ 
+label{
+float: left;
+width:100px;
+text-align: right;
+padding: 10px 0px 4px 10px;
+}
+ 
+input{
+padding: 1px;
+}
+ 
+input,textarea{
+border: 1px solid #CCCCCC;
+margin: 5px 0px;
+}
+ 
+textarea{
+padding: 2px;
+}
+ 
+.bt{
+width: 38px;
+height: 20px;
+font-size: 11px;
+border: solid 1px #CCCCCC;
+background: #FBFBFB;
+text-align: center;
+}
+ 
+.btcenter{
+text-align: center;
+clear: left;
+padding: 4px 0px 0px;
+}
+ 
+/*----下面是选中表单时的变化效果，大家可以自由发挥的---*/
+.sffocus {
+background: #F0F9FB; /*----for IE----*/
+border: 1px solid #1D95C7;
+}
+ 
+textarea:focus, input:focus {
+background: #F0F9FB; /*----for firefox......----*/
+border: 1px solid #1D95C7;
+}
+ 
+body {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 12px;
+color: #666666;
+margin-top: 20px;
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhangjiaolong.auth.model.ResourcesMapper">
+
+	<resultMap id="BaseResultMap" type="com.zhangjiaolong.auth.model.Resources">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="ismenu" property="menu" jdbcType="BIT" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="pid" property="pId" jdbcType="INTEGER" />
+		<collection property="roles" ofType="com.zhangjiaolong.auth.model.Role">
+		   	<id column="role_id" property="id"/>
+		   	<result column="role_name" property="name"/>
+		   	<result column="role_isDel" property="del"/>
+		   	<result column="role_createtime" property="createTime"/>
+		</collection>
+	</resultMap>
+	
+<!-- 公共部分开始 -->
+	<sql id="where_page">
+		from resource t left join role_resource t1 on t.id=t1.resourceId left join role t2 on t1.role_id=t2.id
+		<where>
+			<if test="name != null">and t.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') </if>
+			<if test="url != null">and t.url like CONCAT('%',#{url,jdbcType=VARCHAR},'%') </if>
+			<if test="menu != null">and t.menu=#{menu,jdbcType=BIT}</if>
+		</where>
+		order by t.createTime desc
+	</sql>
+	
+	<!-- 条件查询总数 -->
+	<select id="countPageList" parameterType="map" resultType="long">
+		select count(*) <include refid="where_page"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPageList" parameterType="map" resultMap="BaseResultMap">
+		<include refid="MySQLMapper.pagingStart"/>
+		select t.*,t2.id role_id,t2.name role_name,t2.isdel del,t2.createtime createTime
+		<include refid="where_page"/>
+		<include refid="MySQLMapper.pagingEnd"/>
+	</select>
+	<!-- 根据主键查询 -->
+	<select id="queryByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+	 	select t.*,t2.id role_id,t2.name role_name,t2.isdel del,t2.createtime createTime from resource t left join role_resource t1 on t.id=t1.resourceId left join role t2 on t1.role_id=t2.id where t.id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 条件单个查询 -->
+	<select id="queryByParamersSingle" parameterType="map" resultMap="BaseResultMap">
+		select t.*,t2.id role_id,t2.name role_name,t2.isdel del,t2.createtime createTime
+		<include refid="where_page"/>
+	</select>
+	<!-- 插入 -->
+	<insert id="insertByEntity" parameterType="com.zhangjiaolong.auth.model.Resources"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into resource values(
+			#{id,jdbcType=INTEGER},
+			#{name,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{menu,jdbcType=BIT},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{pId,jdbcType=INTEGER}
+		)
+	</insert>
+	<!-- 更新 -->
+	<update id="updateByEntity" parameterType="com.zhangjiaolong.auth.model.Resources">
+		update resource 
+		<set>
+			<if test="name!=null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="url!=null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime!=null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="menu!=null">
+				ismenu = #{menu,jdbcType=BIT},
+			</if>
+			<if test="pId!=null">
+				pId = #{pId,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		delete from resource where id=#{id, jdbcType=INTEGER}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBatchByPrimaryKey" parameterType="map">
+		delete from resource
+		<where>
+			<if test="ids != null">
+				<trim prefix="and id in" >
+					<foreach collection="ids" item="item" open="(" close=")" separator=",">
+						#{item, jdbcType=INTEGER}
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</delete>
+<!-- 公共部分结束-->
+
+
+</mapper>

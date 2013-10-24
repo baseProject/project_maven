@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhangjiaolong.auth.model.RoleMapper">
+
+	<resultMap id="BaseResultMap" type="com.zhangjiaolong.auth.model.Role">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="isdel" property="del" jdbcType="BIT" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+	
+		<collection property="resources" ofType="com.zhangjiaolong.auth.model.Resources">
+		   	<id column="resource_id" property="id"/>
+		   	<result column="resource_name" property="name"/>
+		   	<result column="resource_url" property="url"/>
+		   	<result column="resource_ismenu" property="menu"/>
+		   	<result column="resource_createtime" property="createTime"/>
+		</collection>
+	</resultMap>
+<!-- 公共部分开始 -->
+	<sql id="where_page">
+		from role t left join role_resource t1 on t.id=t1.role_id left join resource t2 on t1.resourceId=t2.id
+		<where>
+			<if test="name != null">and t.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') </if>
+		</where>
+		order by t.createTime desc
+	</sql>
+	<!-- 条件查询总数 -->
+	<select id="countPageList" parameterType="map" resultType="long">
+		select count(*) <include refid="where_page"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPageList" parameterType="map" resultMap="BaseResultMap">
+		<include refid="MySQLMapper.pagingStart"/>
+		select t.*,t2.id resource_id,t2.name resource_name,t2.url resource_url,t2.ismenu resource_ismenu,t2.createtime resource_createtime
+		<include refid="where_page"/>
+		<include refid="MySQLMapper.pagingEnd"/>
+	</select>
+	<!-- 根据主键查询 -->
+	<select id="queryByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+	 	select t.*,t2.id resource_id,t2.name resource_name,t2.url resource_url,t2.ismenu resource_ismenu,t2.createtime resource_createtime from role t left join role_resource t1 on t.id=t1.role_id left join resource t2 on t1.resourceId=t2.id where t.id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 条件单个查询 -->
+	<select id="queryByParamersSingle" parameterType="map" resultMap="BaseResultMap">
+		select t.*,t2.id resource_id,t2.name resource_name,t2.url resource_url,t2.ismenu resource_ismenu,t2.createtime resource_createtime
+		<include refid="where_page"/>
+	</select>
+	<!-- 插入 -->
+	<insert id="insertByEntity" parameterType="com.zhangjiaolong.auth.model.Role"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into role values(
+			#{id,jdbcType=INTEGER},
+			#{name,jdbcType=VARCHAR},
+			#{del,jdbcType=BIT},
+			#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!-- 更新 -->
+	<update id="updateByEntity" parameterType="com.zhangjiaolong.auth.model.Role">
+		update role 
+		<set>
+			<if test="name!=null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="del!=null">
+				isdel = #{del,jdbcType=BIT},
+			</if>
+			<if test="createTime!=null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 主键删除 -->
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		delete from role where id=#{id, jdbcType=INTEGER}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBatchByPrimaryKey" parameterType="map">
+		delete from role
+		<where>
+			<if test="ids != null">
+				<trim prefix="and id in" >
+					<foreach collection="ids" item="item" open="(" close=")" separator=",">
+						#{item, jdbcType=INTEGER}
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</delete>
+<!-- 公共部分结束-->
+
+<insert id="saveResources" useGeneratedKeys="true" parameterType="com.zhangjiaolong.auth.model.Role">
+	<selectKey resultType="long" keyProperty="id" order="AFTER">
+		SELECT
+		LAST_INSERT_ID()
+	</selectKey>
+	insert into role_resource values
+	<foreach collection="role.resources" item="item" index="index" separator="," >
+		(null,#{role.id,jdbcType=INTEGER},#{item.id,jdbcType=INTEGER})
+	</foreach>
+</insert>
+<delete id="deleteResources" parameterType="long">
+	delete from user_role where user_id=#{id,jdbcType=INTEGER}
+</delete>
+
+
+</mapper>

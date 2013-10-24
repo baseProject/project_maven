@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Common Mapper -->
+<mapper namespace="OracleMapper">
+
+	<!-- Paging Start -->
+	<sql id="pagingStart">
+		<if test="pagination.start != null and pagination.end != null">
+			<![CDATA[ select * from  ( select rownum r, ttt.*  from (]]>
+		</if>
+	</sql>
+	
+	<!-- Paging End -->
+	<sql id="pagingEnd">
+		<if test="pagination.start != null and pagination.end != null">
+			<![CDATA[ ) ttt where rownum <= #{pagination.end,jdbcType=INTEGER} ) where r > #{pagination.start,jdbcType=INTEGER}]]>
+		</if>
+	</sql>
+
+	<!-- query result Sort information -->
+	<sql id="sortInfo">
+		<choose>
+			<when test=" pagination.sortField != null and pagination.sortField != '' ">
+				order BY t.${pagination.sortField} ${pagination.sortOrder}
+			</when>
+			<otherwise>
+				order by t.id desc
+			</otherwise>
+		</choose>
+	</sql>
+</mapper>

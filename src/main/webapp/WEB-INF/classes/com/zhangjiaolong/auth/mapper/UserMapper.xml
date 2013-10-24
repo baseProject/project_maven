@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhangjiaolong.auth.model.UserMapper">
+
+	<resultMap id="BaseResultMap" type="com.zhangjiaolong.auth.model.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="loginName" property="loginName" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="gender" property="gender" jdbcType="INTEGER" />
+		<result column="isdel" property="del" jdbcType="BIT" />
+		<result column="islock" property="lock" jdbcType="BIT" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+		
+		<collection property="roles" ofType="com.zhangjiaolong.auth.model.Role">
+		   	<id column="role_id" property="id"/>
+		   	<result column="role_name" property="name"/>
+		   	<result column="role_isDel" property="del"/>
+		   	<result column="role_createtime" property="createTime"/>
+		</collection>
+	</resultMap>
+	
+<!-- 公共部分开始 -->
+	<sql id="where_page">
+		from user t
+		<where>
+			<if test="name != null">and t.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') </if>
+			<if test="loginName != null">and t.loginname like CONCAT('%',#{loginName,jdbcType=VARCHAR},'%') </if>
+			<if test="lock != null">and t.lock=#{lock,jdbcType=BIT} </if>
+			<if test="del!=null">and t.isdel=#{del,jdbcType=BIT}</if>
+			<if test="currentUser!=null">and t.loginName!=#{currentUser,jdbcType=VARCHAR}</if>
+		</where>
+		order by t.createTime desc
+	</sql>
+	<!-- 条件查询总数 -->
+	<select id="countPageList" parameterType="map" resultType="long">
+		select count(*) <include refid="where_page"/>
+	</select>
+	<!-- 分页查询 -->
+	<select id="queryPageList" parameterType="map" resultMap="BaseResultMap">
+		<include refid="MySQLMapper.pagingStart"/>
+		select t.*
+		<include refid="where_page"/>
+		<include refid="MySQLMapper.pagingEnd"/>
+	</select>
+	<!-- 根据主键查询 -->
+	<select id="queryByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+	 	select t.* from user t where t.id=#{id,jdbcType=INTEGER}
+	</select>
+	<!-- 条件单个查询 -->
+	<select id="queryByParamersSingle" parameterType="map" resultMap="BaseResultMap">
+		select t.*
+		from user t
+		<where>
+			<if test="name != null">and t.name=#{name,jdbcType=VARCHAR}</if>
+			<if test="loginName != null">and t.loginname=#{loginName,jdbcType=VARCHAR}</if>
+			<if test="lock != null">and t.lock=#{lock,jdbcType=BIT}</if>
+			<if test="del!=null">and t.isdel=#{del,jdbcType=BIT}</if>
+		</where>
+	</select>
+
+	<!-- 条件单个查询 -->
+	<select id="queryAndRoleByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select t.*,t2.id role_id,t2.name role_name,t2.isdel role_isDel,t2.createTime role_createtime
+		from user t left join user_role t1 on t.id=t1.user_Id left join role t2 on t1.role_Id=t2.id
+		<where>
+			<if test="id != null">and t.id=#{id,jdbcType=VARCHAR}</if>
+			<if test="name != null">and t.name=#{name,jdbcType=VARCHAR}</if>
+			<if test="loginName != null">and t.loginname=#{loginName,jdbcType=VARCHAR}</if>
+			<if test="lock != null">and t.lock=#{lock,jdbcType=BIT}</if>
+			<if test="del!=null">and t.isdel=#{del,jdbcType=BIT}</if>
+		</where>
+	</select>
+	
+	<!-- 插入 -->
+	<insert id="insertByEntity" parameterType="com.zhangjiaolong.auth.model.User" useGeneratedKeys="true" keyProperty="id">
+		insert into user values(
+			#{id,jdbcType=INTEGER},
+			#{loginName,jdbcType=VARCHAR},
+			#{email,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{gender,jdbcType=INTEGER},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{lock,jdbcType=BIT},
+			#{del,jdbcType=BIT}
+		)
+	</insert>
+	<!-- 更新 -->
+	<update id="updateByEntity" parameterType="com.zhangjiaolong.auth.model.User">
+		update user 
+		<set>
+			<if test="name!=null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="loginName!=null">
+				loginName = #{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password!=null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="gender!=null">
+				gender = #{gender,jdbcType=INTEGER},
+			</if>
+			<if test="lock!=null">
+				islock = #{lock,jdbcType=BIT},
+			</if>
+			<if test="del!=null">
+				isdel = #{del,jdbcType=BIT},
+			</if>
+			<if test="createTime!=null">
+				createTime = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 主键删除 -->
+	<update id="deleteByPrimaryKey" parameterType="long">
+		update user set isdel=1 where id=#{id, jdbcType=INTEGER}
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteBatchByPrimaryKey" parameterType="map">
+		delete from user
+		<where>
+			<if test="ids != null">
+				<trim prefix="and id in" >
+					<foreach collection="ids" item="item" open="(" close=")" separator=",">
+						#{item, jdbcType=INTEGER}
+					</foreach>
+				</trim>
+			</if>
+		</where>
+	</delete>
+<!-- 公共部分结束-->
+
+<insert id="saveRoles" useGeneratedKeys="true" parameterType="com.zhangjiaolong.auth.model.User">
+	<selectKey resultType="long" keyProperty="id" order="AFTER">
+		SELECT
+		LAST_INSERT_ID()
+	</selectKey>
+	insert into user_role values
+	<foreach collection="user.roles" item="item" index="index" separator="," >
+		(null,#{user.id,jdbcType=INTEGER},#{item.id,jdbcType=INTEGER})
+	</foreach>
+</insert>
+<delete id="deleteRoles" parameterType="long">
+	delete from user_role where user_id=#{id,jdbcType=INTEGER}
+</delete>
+</mapper>
