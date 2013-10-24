@@ -9,7 +9,7 @@
 	function adduserDialog(){		
 		$.layer({
 		    type : 2,
-		    title : '添加用户信息',
+		    title : '添加资源信息',
 		    iframe : {src : '${path}/user/add.html'},
 		    area : ['750px' , '266px'],
 		    offset : ['100px',''],
@@ -18,7 +18,7 @@
 	function edituserDialog(id){
 		$.layer({
 		    type : 2,
-		    title : '修改用户信息',
+		    title : '修改资源信息',
 		    iframe : {src : '${path}/user/edit.html?idUser='+id},
 		    area : ['750px' , '266px'],
 		    offset : ['100px',''],
