@@ -29,11 +29,11 @@ public class UserDaoTest{
 		entity.setCreateTime(new Date());
 		entity.setGender(1);
 		entity.setLock(false);
-		entity.setLoginName("zhangjiaolong");
+		entity.setLoginName("zhangjiaolong1");
 		entity.setName("张蛟龙");
 		String password=null;
 		Md5PasswordEncoder md5=new Md5PasswordEncoder();
-		entity.setPassword(md5.encodePassword("123456", "zhangjiaolong"));
+		entity.setPassword(md5.encodePassword("123456", "zhangjiaolong1"));
 		userService.insertByEntity(entity);
 	}
 }

@@ -14,30 +14,17 @@
     <beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"/>
     
       
-    <http pattern="/login.html" security="none" />
-    <http pattern="/resources/*" security="none" />
-    <http use-expressions="true" auto-config="true"> 
-        <form-login login-page="/login.jsp" 
-                    login-processing-url="/j_spring_security_check" 
-                    default-target-url="/index.html" 
-                    authentication-failure-url="/login.jsp?error=true" /> 
-        <logout logout-success-url="/login.jsp" invalidate-session="true" /> 
-        <remember-me /> 
-        <!-- session管理 --> 
-        <session-management invalid-session-url="/login.jsp"> 
-            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" /> 
-        </session-management> 
-          
-        <!-- FILTER_SECURITY_INTERCEPTOR Spring Security默认的Filter -->
-        <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"/>   
-    </http> 
-      
-    <!-- 自定义过滤器 --> 
-    <beans:bean id="myFilter" class="com.zhangjiaolong.auth.security.MySecurityFilterInterceptor"> 
+     <!-- 自定义过滤器 --> 
+    <beans:bean id="myFilter" class="com.zhangjiaolong.auth.security.MySecurityFilterInterceptor">
         <beans:property name="authenticationManager" ref="authenticationManager" /> 
         <beans:property name="accessDecisionManager" ref="myAccessDecisionManager" /> 
         <beans:property name="securityMetadataSource" ref="mySecurityMetadataSource" /> 
     </beans:bean> 
+    
+    <!-- 页面标签权限功能依赖 -->
+	<beans:bean id="customWebInvocationPrivilegeEvaluator" class="org.springframework.security.web.access.DefaultWebInvocationPrivilegeEvaluator">
+		<beans:constructor-arg ref="myFilter" />
+	</beans:bean>
       
     <!-- 配置认证管理器  --> 
     <authentication-manager alias="authenticationManager"> 
@@ -69,4 +56,24 @@
     <beans:bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource"> 
         <beans:property name="userPropertyToUse" value="username" />
     </beans:bean>
+      
+      
+      
+    <http pattern="/login.html" security="none" />
+    <http pattern="/resources/*" security="none" />
+    <http use-expressions="true" auto-config="true"> 
+        <form-login login-page="/login.jsp" 
+                    login-processing-url="/j_spring_security_check" 
+                    default-target-url="/index.html" 
+                    authentication-failure-url="/login.jsp?error=true" /> 
+        <logout logout-success-url="/login.jsp" invalidate-session="true" /> 
+        <remember-me /> 
+        <!-- session管理 --> 
+        <session-management invalid-session-url="/login.jsp"> 
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="false" /> 
+        </session-management> 
+          
+        <!-- FILTER_SECURITY_INTERCEPTOR Spring Security默认的Filter -->
+        <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"/>   
+    </http> 
 </beans:beans> 

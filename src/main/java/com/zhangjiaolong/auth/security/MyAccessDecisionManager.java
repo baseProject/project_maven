@@ -41,7 +41,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager
             }  
         }  
         // 没有权限  
-        throw new AccessDeniedException(" 没有权限访问！ ");  
+        throw new AccessDeniedException("没有权限");  
     }  
       
     @Override 

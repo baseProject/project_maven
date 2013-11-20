@@ -217,8 +217,14 @@
 					<input type="button" value="修改" onclick="edituserDialog(${item.id})"/>
 					<input type="button" value="角色管理" onclick="editRole(${item.id})"/>
 					<input type="button" value="密码重置" onclick="updatePS(${item.id})"/>
-					<input type="button" value="锁定" onclick="lock(${item.id})"/>
-					<input type="button" value="解锁" onclick="unlock(${item.id})"/>
+					<sec:authorize url="/user/updateLock.html">
+						<c:if test="${item.lock==false}">
+							<input type="button" value="锁定" onclick="lock(${item.id})"/>
+						</c:if>
+						<c:if test="${item.lock==true}">
+							<input type="button" value="解锁" onclick="unlock(${item.id})"/>
+						</c:if>
+					</sec:authorize>
 					<input type="button" value="删除" onclick="deleteuserDialog(${item.id})"/>
 				</td>
 			</tr>
